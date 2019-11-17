@@ -1,4 +1,4 @@
-function camelize (str) {
+/* function camelize (str) {
 return str
 .split(/[-|.]/)
 // uppercase first letter of all words except for the first word
@@ -44,3 +44,25 @@ let arr2 = [5, 3, 8, 1];
 filterRangeInPlace(arr2, 1, 4); // removed the numbers except from 1 to 4
   
 console.log( arr2 ); // [3, 1]
+
+
+let arr = [5, 2, 1, -10, 8];
+
+arr.sort(function (firstNumber, secondNumber) {
+  return secondNumber - firstNumber
+});
+
+console.log( arr ); // 8, 5, 2, 1, -10
+
+ */
+
+
+function copySorted (array) {
+  return array.slice().sort();
+}
+
+let arr = ["HTML", "JavaScript", "CSS"];
+let sorted = copySorted(arr);
+
+console.log( sorted ); // CSS, HTML, JavaScript
+console.log( arr ); // HTML, JavaScript, CSS (no changes)
