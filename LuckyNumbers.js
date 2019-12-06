@@ -12,7 +12,7 @@ function isLucky(n) {
             sum1 += +s1[i];
             sum2 += +s2[i];
         }
-        return sum1 == sum2? true : false;
+        return sum1 === sum2;
     } else {
         return n + ' is not a valid ticket number (uneven)'
     }
@@ -21,4 +21,4 @@ function isLucky(n) {
 let ticket1 = 1230;
 let ticket2 = 239017;
 
-console.log(isLucky(ticket2))
+console.log(isLucky(ticket1))
