@@ -12,7 +12,7 @@ function sum (x) {
 console.log(sum(3)(5));
   
   
-  // swap keys and values of an object
+// swap keys and values of an object
   
 let user = {
     name: "John",
@@ -38,7 +38,7 @@ console.log(swap(user)); //ordered by numbers (integers) first, then non enumera
 'pluck' returns an array of property values using the 'key'.
 */
 
-let arr = [
+/* let arr = [
     {name: 'doggo1', age: 14}, 
     {name: 'doggo2', age: 25},                              
     {name: 'doggo3', age: 6},
@@ -64,6 +64,7 @@ console.log(pluck2(arr,'name'))
 
 
 let exampleArray = [1,2,3,4,5];
+
 function map (array, appliedFunction) {
     let mapArray = [];
     for (let i = 0; i < array.length; i++) {
@@ -71,4 +72,26 @@ function map (array, appliedFunction) {
     }
     return mapArray;
 }
-console.log(map(exampleArray, function (num) {return num ** 2}))    //avoiding arrow function
+console.log(map(exampleArray, function (num) {return num ** 2}))    //avoiding arrow function */
+
+
+// if predicate of the given value is true, the callback function with the given value is supposed to be returned, else, only the value is returned
+
+function maybe(predicate, callback) {
+  return function(value) {
+    if (predicate(value) === true) {
+      return callback(value);
+    } 
+    return value;
+  } 
+}
+
+function greaterThan100(x) {
+  return x > 100;
+}
+
+function addOne(x) {
+  return x + 1;
+}
+
+console.log(maybe(greaterThan100,addOne)(1001))
