@@ -6,7 +6,7 @@ function reverseInParentheses(inputString) {
 }
 
 function reverse(inputString) {
-    let regex = /\(([^()]*)\)/i; //case sensitive matches of the "words" within brackets
+    let regex = /\(([^()]*)\)/i; //case insensitive matches of the "words" within brackets
     let subString = regex.exec(inputString)[1];  //exec executes a search and returns an array
 
     subString = subString.split("").reverse().join("");
