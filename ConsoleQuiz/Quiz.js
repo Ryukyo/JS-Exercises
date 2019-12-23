@@ -25,7 +25,6 @@ Question.prototype.verifyAnswer = function(answer) {
         return true;
     }    
     return false;
-
 }
 
 let question1 = new Question('Is the earth round?', 
@@ -38,7 +37,7 @@ let question3 = new Question('Is an elephant bigger than ants?',
     ['Yes', 'No', 'How many ants?'],
     2);
 let question4 = new Question('How many colors has the German flag?',
-    [1, 2, 3],
+    [2, 4, 3],
     2);
 let question5 = new Question('Where do Polar bears live?',
     ['The Arctic of the North Pole', 'South Pole\'s Antarctica', 'They enjoy both poles'],
