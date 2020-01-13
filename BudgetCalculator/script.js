@@ -77,4 +77,13 @@ let controller = (function(budgetCtrl, UICtrl) {
         } */
     };
 
+    return {
+        init: function() {
+            console.log("Initialized Application")
+            setupEventListeners();
+        }
+    }
+
 })(budgetController, UIController);
+
+controller.init();
