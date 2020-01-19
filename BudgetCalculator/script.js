@@ -1,27 +1,52 @@
 let budgetController = (function() {
     
-    let Income = new function (id, description, value) {
+    let Income = function(id, description, value) {
         this.id = id;
         this.description = description;
         this.value = value;
-    }
+    };
 
-    let Expense = new function (id, description, value) {
+    let Expense = function(id, description, value) {
         this.id = id;
         this.description = description;
         this.value = value;
-    }
+    };
 
     let data = {
         entries: {
-            income: [],
-            expense: []
+            inc: [],
+            exp: []
         },
         totals: {
-            income: [],
-            expense: []
+            inc: 0,
+            exp: 0
         }
-    }
+    };
+
+    return {
+        addItem: function (type, desc, val) {
+            let ID, newItem;
+
+            // Create new ID; 1st entry 0, rest calculated depending on current length of data
+            if (data.entries[type].length > 0) {
+                ID = data.entries[type][data.entries[type].length - 1].id + 1; 
+            } else {
+                ID = 0;
+            };
+            // Create new item depending on type with values and push to data object
+            if (type === 'exp') {
+                newItem = new Expense (ID, desc, val);
+            } else if (type === 'inc') {
+                newItem = new Income (ID, desc, val);
+            };
+            data.entries[type].push(newItem);
+
+            return newItem;
+        },
+        /* testing: function() {
+            console.log(data)
+        } */
+    };
 
 })();
 
@@ -67,7 +92,7 @@ let controller = (function(budgetCtrl, UICtrl) {
     let setupEventListeners = function() {
         let DOM = UICtrl.getDOMstrings();
         
-        //Click on button or enter to accept user input
+        // Click on button or enter to accept user input
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
         document.addEventListener('keypress', function(event) {
             if (event.keyCode === 13 || event.which === 13) {
@@ -76,33 +101,34 @@ let controller = (function(budgetCtrl, UICtrl) {
         });        
     };
 
-    var ctrlAddItem = function() {
-        var input, newItem;
+    let ctrlAddItem = function() {
+        let input, newItem;
         
         // Get the user input data
-        input = UICtrl.getInput();        
-        
-        /* if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
-            // 2. Add the item to the budget controller
+        input = UICtrl.getInput();
+
+        //Verify valid input
+        if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
+            // Add the item to the budget controller
             newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-            // 3. Add the item to the UI
+            /* Add the item to the UI
             UICtrl.addListItem(newItem, input.type);
 
-            // 4. Clear the fields
+            // Clear the fields
             UICtrl.clearFields();
 
-            // 5. Calculate and update budget
+            // Calculate and update budget
             updateBudget();
             
-            // 6. Calculate and update percentages
-            updatePercentages();
-        } */
+            // Calculate and update percentages
+            updatePercentages(); */
+        } 
     };
 
     return {
         init: function() {
-            console.log("Initialized Application")
+            console.log("Initialized Application");
             setupEventListeners();
         }
     }
