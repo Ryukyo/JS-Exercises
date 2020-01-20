@@ -77,7 +77,26 @@ let UIController = (function() {
                 description: document.querySelector(DOMstrings.inputDescription).value,
                 value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
             };
-        },        
+        },
+        
+        addListItem: function (obj, type) {
+            let html, newHtml, element;
+
+            // Depending on type of input object, create a placeholder HTML block
+            if (type === 'inc') {
+                element = DOMstrings.incomeContainer;
+                html = '<div class="item clearfix" id="inc-%id%"> <div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            } else {
+                element = DOMstrings.expensesContainer;
+                html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            }
+            // Enrich placeholder string with the objects id, desc and val properties
+            newHtml = html.replace('%id%', obj.id);
+            newHtml = newHtml.replace('%description%', obj.description);
+            newHtml = newHtml.replace('%value%', obj.value);
+            
+            document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+        },
         
         getDOMstrings: function() {
             return DOMstrings;
@@ -112,10 +131,10 @@ let controller = (function(budgetCtrl, UICtrl) {
             // Add the item to the budget controller
             newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-            /* Add the item to the UI
+            //Add the item to the UI
             UICtrl.addListItem(newItem, input.type);
 
-            // Clear the fields
+            /* Clear the fields
             UICtrl.clearFields();
 
             // Calculate and update budget
