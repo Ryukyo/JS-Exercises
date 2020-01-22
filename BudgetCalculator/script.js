@@ -20,7 +20,9 @@ let budgetController = (function() {
         totals: {
             inc: 0,
             exp: 0
-        }
+        },
+        budget: 0,
+        percentage: -1,
     };
 
     return {
@@ -43,6 +45,20 @@ let budgetController = (function() {
 
             return newItem;
         },
+        // Get all values necessary for budget calculation
+        getBudget: function () {
+            return {
+                budget: data.budget,
+                totalInc: data.totals.inc,
+                totalExp: data.totals.exp,
+                percentage: data.percentage
+            };
+        },
+
+        calculateBudget: function() {
+
+        }
+
         /* testing: function() {
             console.log(data)
         } */
@@ -78,6 +94,10 @@ let UIController = (function() {
                 value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
             };
         },
+
+        getDOMstrings: function() {
+            return DOMstrings;
+        },
         
         addListItem: function (obj, type) {
             let html, newHtml, element;
@@ -110,9 +130,9 @@ let UIController = (function() {
             fieldsArr[0].focus();
         },
         
-        getDOMstrings: function() {
-            return DOMstrings;
-        }
+        displayBudget: function (obj) {
+
+        },
     };
 
 })();
@@ -156,6 +176,18 @@ let controller = (function(budgetCtrl, UICtrl) {
             updatePercentages(); */
         } 
     };
+
+    let updateBudget = function () {
+        let budget;
+        // Calculate the budget
+        budgetCtrl.calculateBudget();
+        // Return budget
+        budget = budgetCtrl.getBudget();
+        // Display budget in UI
+        UICtrl.displayBudget(budget);
+    }
+
+
 
     return {
         init: function() {
