@@ -25,6 +25,14 @@ let budgetController = (function() {
         percentage: -1,
     };
 
+    let calcTotals = function (type) {
+        let sum = 0;
+        data.entries[type].forEach(function(current) {
+            sum += current.value;
+        });
+        data.totals[type] = sum; 
+    }
+
     return {
         addItem: function (type, desc, val) {
             let ID, newItem;
@@ -56,12 +64,21 @@ let budgetController = (function() {
         },
 
         calculateBudget: function() {
+            calcTotals('inc');
+            calcTotals('exp');
 
-        }
+            // Calculate budget based by subtracting total expenses from total income
+            data.budget = data.totals.inc - data.totals.exp;
+
+            // Only if there is an income, calculate % of spent total income (to avoid division by 0) 
+            if (data.totals.inc > 0) {
+                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100)
+            }  
+        },
 
         /* testing: function() {
             console.log(data)
-        } */
+        } */ 
     };
 
 })();
@@ -131,7 +148,15 @@ let UIController = (function() {
         },
         
         displayBudget: function (obj) {
+            document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
+            document.querySelector(DOMstrings.expensesLabel).textContent = obj.totalExp;
+            document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
 
+            if (obj.percentage > 0) {
+                document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + ' %';
+            } else {
+                document.querySelector(DOMstrings.percentageLabel).textContent = '-%-';
+            }
         },
     };
 
@@ -169,29 +194,36 @@ let controller = (function(budgetCtrl, UICtrl) {
             // Clear user input and set focus
             UICtrl.clearFields();
 
-            /* Calculate and update budget
+            // Calculate and update budget
             updateBudget();
             
-            // Calculate and update percentages
-            updatePercentages(); */
+            // Calculate and update percentages of each expense
+            //updatePercentages();
         } 
     };
 
     let updateBudget = function () {
         let budget;
+
         // Calculate the budget
         budgetCtrl.calculateBudget();
+
         // Return budget
         budget = budgetCtrl.getBudget();
+
         // Display budget in UI
         UICtrl.displayBudget(budget);
     }
 
-
-
     return {
         init: function() {
             console.log("Initialized Application");
+            UIController.displayBudget({
+                budget: 0,
+                totalInc: 0,
+                totalExp: 0,
+                percentage: -1
+            });
             setupEventListeners();
         }
     }
