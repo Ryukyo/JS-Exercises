@@ -174,7 +174,10 @@ let controller = (function(budgetCtrl, UICtrl) {
             if (event.keyCode === 13 || event.which === 13) {
                 ctrlAddItem();
             }
-        });        
+        });
+
+        // Click on delete button of any item, bubble event up to common container and delete
+        document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);        
     };
 
     let ctrlAddItem = function() {
@@ -202,6 +205,23 @@ let controller = (function(budgetCtrl, UICtrl) {
         } 
     };
 
+    let ctrlDeleteItem = function (event) {
+        let itemID, type, id;
+
+        // Traverse DOM to parent node of clicked delete icon that is shared by both, exp and inc
+        itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
+        type = itemID.split('-')[0];
+        id = itemID.split('-')[1];
+
+        // Delete item from data structure
+
+        // Delete item from UI
+
+        // Update and display budget
+        
+    };
+
     let updateBudget = function () {
         let budget;
 
@@ -213,7 +233,7 @@ let controller = (function(budgetCtrl, UICtrl) {
 
         // Display budget in UI
         UICtrl.displayBudget(budget);
-    }
+    };
 
     return {
         init: function() {
