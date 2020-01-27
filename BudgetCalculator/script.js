@@ -43,6 +43,7 @@ let budgetController = (function() {
             } else {
                 ID = 0;
             };
+            
             // Create new item depending on type with values and push to data object
             if (type === 'exp') {
                 newItem = new Expense (ID, desc, val);
@@ -53,6 +54,24 @@ let budgetController = (function() {
 
             return newItem;
         },
+
+        deleteItem: function (type, id) {
+            let idsArr, index;
+
+            // Get the ID of all items currently present in the array of objects of the specified type
+            idsArr = data.entries[type].map(function(current) {
+                return current.id;
+            });
+
+            // Get the index of the id of the item to be deleted
+            index = idsArr.indexOf(id);
+
+            // If item is present, remove from data object
+            if (index > -1) {
+                data.entries[type].splice(index, 1);
+            }
+        },
+
         // Get all values necessary for budget calculation
         getBudget: function () {
             return {
@@ -76,9 +95,9 @@ let budgetController = (function() {
             }  
         },
 
-        /* testing: function() {
+        testing: function() {
             console.log(data)
-        } */ 
+        } 
     };
 
 })();
@@ -211,11 +230,12 @@ let controller = (function(budgetCtrl, UICtrl) {
         // Traverse DOM to parent node of clicked delete icon that is shared by both, exp and inc
         itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
 
+        // Get the type and id (converted to number) from the html element string
         type = itemID.split('-')[0];
-        id = itemID.split('-')[1];
+        id = +itemID.split('-')[1];
 
         // Delete item from data structure
-
+        budgetCtrl.deleteItem(type, id);
         // Delete item from UI
 
         // Update and display budget
