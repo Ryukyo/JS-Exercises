@@ -10,6 +10,7 @@ let budgetController = (function() {
         this.id = id;
         this.description = description;
         this.value = value;
+        this.percentage = -1;
     };
 
     let data = {
@@ -91,7 +92,9 @@ let budgetController = (function() {
 
             // Only if there is an income, calculate % of spent total income (to avoid division by 0) 
             if (data.totals.inc > 0) {
-                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100)
+                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+            } else {
+                data.percentage = -1;
             }  
         },
 
@@ -152,6 +155,13 @@ let UIController = (function() {
             newHtml = newHtml.replace('%value%', obj.value);
             
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+        },
+
+        deleteListItem: function (selectorId) {
+            let childElement;
+
+            childElement = document.getElementById(selectorId);
+            childElement.parentNode.removeChild(childElement)
         },
 
         clearFields: function () {
@@ -230,16 +240,20 @@ let controller = (function(budgetCtrl, UICtrl) {
         // Traverse DOM to parent node of clicked delete icon that is shared by both, exp and inc
         itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
 
-        // Get the type and id (converted to number) from the html element string
-        type = itemID.split('-')[0];
-        id = +itemID.split('-')[1];
+        if (itemID) {
+            // Get the type and id (converted to number) from the html element string
+            type = itemID.split('-')[0];
+            id = +itemID.split('-')[1];
 
-        // Delete item from data structure
-        budgetCtrl.deleteItem(type, id);
-        // Delete item from UI
+            // Delete item from data structure
+            budgetCtrl.deleteItem(type, id);
 
-        // Update and display budget
-        
+            // Delete item from UI
+            UIController.deleteListItem(itemID)
+
+            // Update and display budget
+            updateBudget();
+        }
     };
 
     let updateBudget = function () {
