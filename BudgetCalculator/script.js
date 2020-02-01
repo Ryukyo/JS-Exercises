@@ -230,7 +230,7 @@ let controller = (function(budgetCtrl, UICtrl) {
             updateBudget();
             
             // Calculate and update percentages of each expense
-            //updatePercentages();
+            updatePercentages();
         } 
     };
 
@@ -268,6 +268,17 @@ let controller = (function(budgetCtrl, UICtrl) {
         // Display budget in UI
         UICtrl.displayBudget(budget);
     };
+
+    let updatePercentages = function () {
+        
+        // Calculate percentages
+
+
+        //Read percentages from budget controller
+
+
+        // Update UI
+    }
 
     return {
         init: function() {
