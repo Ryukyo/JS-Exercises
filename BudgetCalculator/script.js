@@ -235,6 +235,19 @@ let UIController = (function() {
                     current.textContent = '-%-';
                 }
             })
+        },
+
+        displayDate: function () {
+            let now, month, year, writtenMonths;
+
+            // FIND BETTER METHOD TO DISPLAY MONTH
+            writtenMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            now = new Date();
+            month = now.getMonth();
+            year = now.getFullYear();
+
+            document.querySelector(DOMstrings.dateLabel).textContent = writtenMonths[month] + " " + year;
         }
     };
 
@@ -336,6 +349,7 @@ let controller = (function(budgetCtrl, UICtrl) {
     return {
         init: function() {
             console.log("Initialized Application");
+            UIController.displayDate();
             UIController.displayBudget({
                 budget: 0,
                 totalInc: 0,
