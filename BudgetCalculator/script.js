@@ -159,6 +159,11 @@ let UIController = (function() {
             callback(list[i], i);
         }
     };
+
+    let formatNumber = function (num, type) {
+        // Depending on type, add + or -, round decimals to 2 and if applicable, add a ',' every 3 digits      
+        return (type === 'exp'? '- ' : '+ ') + num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
     
     return {
         getInput: function() {
@@ -188,7 +193,7 @@ let UIController = (function() {
             // Enrich placeholder string with the objects id, desc and val properties
             newHtml = html.replace('%id%', obj.id);
             newHtml = newHtml.replace('%description%', obj.description);
-            newHtml = newHtml.replace('%value%', obj.value);
+            newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
             
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
@@ -212,11 +217,31 @@ let UIController = (function() {
 
             fieldsArr[0].focus();
         },
+
+        changeInputColors: function() {
+            let fields;
+
+            fields = document.querySelectorAll(
+                DOMstrings.inputType + ',' +
+                DOMstrings.inputValue + ',' +
+                DOMstrings.inputDescription
+            );
+
+            nodeListForEach(fields, function(current) {
+                current.classList.toggle('red-focus');
+            });
+
+            document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
+        },
         
         displayBudget: function (obj) {
-            document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
-            document.querySelector(DOMstrings.expensesLabel).textContent = obj.totalExp;
-            document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
+            let type;
+
+            obj.budget >= 0 ? type = 'inc' : type = 'exp';
+
+            document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+            document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
+            document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc,'inc');
 
             if (obj.percentage > 0) {
                 document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + ' %';
@@ -268,7 +293,10 @@ let controller = (function(budgetCtrl, UICtrl) {
         });
 
         // Click on delete button of any item, bubble event up to common container and delete
-        document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);        
+        document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+        // Change the color of the focus and button depending on type of input
+        document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changeInputColors);
     };
 
     let ctrlAddItem = function() {
