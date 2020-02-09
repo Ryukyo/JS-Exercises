@@ -127,7 +127,6 @@ let budgetController = (function() {
             })
         },
 
-
         testing: function() {
             console.log(data)
         } 
@@ -236,13 +235,14 @@ let UIController = (function() {
         
         displayBudget: function (obj) {
             let type;
-
+            // If the budget is positive, treat it like an income (add + sign), else a - sign;
             obj.budget >= 0 ? type = 'inc' : type = 'exp';
 
             document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.budget, type);
             document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
-            document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc,'inc');
-
+            document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
+            
+            // If valid percentage value is present, add % sign to the value
             if (obj.percentage > 0) {
                 document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + ' %';
             } else {
@@ -263,16 +263,15 @@ let UIController = (function() {
         },
 
         displayDate: function () {
-            let now, month, year, writtenMonths;
-
-            // FIND BETTER METHOD TO DISPLAY MONTH
-            writtenMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let now, month, year;
+            // Original and faster method when used many times; set textContent to "writtenMonths[month]"
+            //writtenMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             
             now = new Date();
-            month = now.getMonth();
+            month = now.toLocaleString('en-US', {month: 'long'});
             year = now.getFullYear();
-
-            document.querySelector(DOMstrings.dateLabel).textContent = writtenMonths[month] + " " + year;
+            
+            document.querySelector(DOMstrings.dateLabel).textContent = month + " " + year;
         }
     };
 
