@@ -19,9 +19,48 @@ class Vec {
 }
 
 
-console.log(new Vec(1, 2).plus(new Vec(2, 3)));
+//console.log(new Vec(1, 2).plus(new Vec(2, 3)));
 // Vec{x: 3, y: 5}
-console.log(new Vec(1, 2).minus(new Vec(2, 3)));
+//console.log(new Vec(1, 2).minus(new Vec(2, 3)));
 // Vec{x: -1, y: -1}
-console.log(new Vec(3, 4).length);
+//console.log(new Vec(3, 4).length);
 // 5
+
+
+class Group {
+    constructor() {
+        this.valueGroup = [];
+    };
+
+    add(value) {
+        if (!this.has(value)) {
+            this.valueGroup.push(value);
+        }
+    };
+
+    delete (value) {
+        this.valueGroup = this.valueGroup.filter(val => val !== value);
+    };
+
+    has (value) {
+        return this.valueGroup.includes(value);
+    };
+
+    static from (valueRange) {
+        let group = new Group;
+        for (let val of valueRange) {
+            group.add(val)
+        }
+        return group;
+    };
+};
+
+let group = Group.from([10, 20]);
+console.log(group.has(10));
+// → true
+console.log(group.has(30));
+// → false
+group.add(10);
+group.delete(10);
+console.log(group.has(10));
+// → false
