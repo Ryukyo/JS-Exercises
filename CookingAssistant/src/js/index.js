@@ -1,3 +1,4 @@
 // Global app controller
 import test from './test'
-console.log(`Imported ${test}`);
+const x = 100;
+console.log(`Imported ${test}. Variable x equals ${x}`);
