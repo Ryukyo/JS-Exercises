@@ -21,6 +21,16 @@ export const clearResults = () => {
     elements.searchResPages.innerHTML = '';
 };
 
+export const highlightingSelectedRecipe = id => {
+    const results = Array.from(document.querySelectorAll('.results__link'));
+   // Deselect already highlighted recipes
+    results.forEach(el => {
+        el.classList.remove('results__link--active');
+    })
+    // Highlight new selected recipe
+    document.querySelector(`a[href*="${id}"]`).classList.add('results__link--active');
+}
+
 //buttonType: previous or next
 const createButton = (page, buttonType) => `
     <button class="btn-inline results__btn--${buttonType}" data-goto=${buttonType === 'prev'? page - 1 : page + 1}>
