@@ -2,10 +2,12 @@
 import Search from './models/Search';
 import Recipe from './models/Recipe';
 import List from './models/List';
+import Like from './models/Likes';
 import * as searchView from './views/searchView';
 import * as recipeView from './views/recipeView';
 import * as listView from './views/listView';
 import {elements, renderLoader, clearLoader} from './views/base';
+import Likes from './models/Likes';
 
 const state = {};
 
@@ -126,18 +128,57 @@ elements.shopping.addEventListener('click', e => {
     }
 });
 
+// Like Controller
+
+const controlLike = () => {
+    if (!state.likes) state.likes = new Likes();
+    const currentID = state.recipe.id;
+
+    // Recipe id is not already on like list
+    if (!state.likes.isLiked(currentID)) {
+        // Add like to state
+        const newLike = state.likes.addLike(
+            currentID,
+            state.recipe.title,
+            state.recipe.publisher,
+            state.recipe.img
+            );
+
+        // Toggle like button
+
+
+        // Add like to UI list
+
+
+    } // Recipe id is already on like list
+    else {
+        // Remove like from state
+        state.likes.deleteLike(currentID);
+
+        // Toggle like button
+
+
+        // Remove like from UI list
+
+    }
+}
 
 // Handling recipe button clicks
 elements.recipe.addEventListener('click', e => {
     if (e.target.matches('.btn-decrease, .btn-decrease *')) {
+        // Decrease button is clicked
         if (state.recipe.servings > 1) {
             state.recipe.updateServings('dec');
             recipeView.updateServingsAndIngredientsUI(state.recipe);
         }
     } else if (e.target.matches('.btn-increase, .btn-increase *')) {
+        // Decrease button is clicked
         state.recipe.updateServings('inc');
         recipeView.updateServingsAndIngredientsUI(state.recipe);
     } else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
+        // Add ingredients to shopping list
         controlList();
+    } else if (e.target.matches('.recipe__love, .recipe__love *')) {
+        controlLike();
     }
 });
