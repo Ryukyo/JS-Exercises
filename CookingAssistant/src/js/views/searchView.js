@@ -28,7 +28,7 @@ export const highlightingSelectedRecipe = id => {
         el.classList.remove('results__link--active');
     })
     // Highlight new selected recipe
-    document.querySelector(`a[href*="${id}"]`).classList.add('results__link--active');
+    document.querySelector(`.results__link[href*="${id}"]`).classList.add('results__link--active');
 }
 
 //buttonType: previous or next
@@ -80,7 +80,7 @@ const renderRecipe = recipe => {
 };
 
 // Limit is set to 17 since it seems to fit all results within the column of the search results
-const limitRecipeTitle = (title, limit = 17) => {
+export const limitRecipeTitle = (title, limit = 17) => {
     const newTitle = [];
     if(title.length > limit) {
        title.split(' ').reduce((sum, cur) => {
