@@ -7,6 +7,10 @@ export default class Likes {
         // Object containing all the elements that are to be displayed in the like-list
         const like = { id, title, publisher, img};
         this.likes.push(like);
+
+        // Persist data in local storage
+        this.persistData();
+
         return like;
     }
 
@@ -14,6 +18,9 @@ export default class Likes {
         // As with list
         const index = this.likes.findIndex(el => el.id === id);
         this.likes.splice(index, 1);
+
+        // Persist data in local storage
+        this.persistData();
     }
 
     isLiked(id) {
@@ -23,5 +30,16 @@ export default class Likes {
 
     getNumberOfLikes () {
         return this.likes.length;
+    }
+
+    persistData () {
+       localStorage.setItem('likes', JSON.stringify(this.likes)); 
+    }
+
+    readStorage () {
+        const storage = JSON.parse(localStorage.getItem('likes'));
+
+        // Retrieve likes from local storage to show them even after page refresh
+        if (storage) this.likes = storage;
     }
 }

@@ -8,16 +8,18 @@ export const clearRecipe = () => {
 // Convert the decimal part of numbers to fractions e.g. 2.5 -> 2 1/2
 const formatCount = count => {
     if (count) {
-        const [int, dec] = count.toString().split('.').map(el => parseInt(el, 10));
+        // To avoid fraction number but still get decimals (e.g. .333333) create new count
+        const newCount = Math.round(count * 10000) / 10000;
+        const [int, dec] = newCount.toString().split('.').map(el => parseInt(el, 10));
 
-        if (!dec) return count;
+        if (!dec) return newCount;
 
         if (int === 0) {
-            const fraction = new Fraction(count);
-            // numerator/denomiator from "Fraction"
+            const fraction = new Fraction(newCount);
+
             return `${fraction.numerator}/${fraction.denominator}`;
         } else {
-            const fraction = new Fraction(count - int);
+            const fraction = new Fraction(newCount - int);
             return `${int} ${fraction.numerator}/${fraction.denominator}`;
         }
     }
@@ -31,7 +33,7 @@ const createIngredient = ingredient => `
         </svg>
         <div class="recipe__count">${formatCount(ingredient.count)}</div>
         <div class="recipe__ingredient">
-            <span class="recipe__unit">${ingredient.units}</span>
+            <span class="recipe__unit">${ingredient.unit}</span>
             ${ingredient.ingredient}
         </div>
     </li>
