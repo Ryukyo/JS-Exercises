@@ -89,7 +89,14 @@ class GroupIterator {
 //console.log(group.has(10));
 // → false
 
-for (let value of Group.from(["a", "b", "c"])) {
+/* for (let value of Group.from(["a", "b", "c"])) {
     console.log(value);
-}
+} */
 // a, b, c
+
+let map = {one: true, two: true, hasOwnProperty: true};
+
+// Fix this call
+//console.log(map.hasOwnProperty("one"));
+// → true
+console.log(Object.hasOwnProperty.call(map, "one"));
