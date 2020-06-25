@@ -101,6 +101,28 @@ function goalOrientedRobot({place, parcels}, route) {
     return {direction: route[0], memory: route.slice(1)};
 }
 
+function optimizedRobot({place, parcels}, route) {
+  if (route.length == 0) {
+    let routes = parcels.map(parcel => {
+      if (parcel.place != place) {
+        return {route: findRoute(roadGraph, place, parcel.place),
+                pickUp: true};
+      } else {
+        return {route: findRoute(roadGraph, place, parcel.address),
+                pickUp: false};
+      } 
+  });
+
+  // Generate a score to determine which route to choose. Shorter routes are preferred (by subtracting route.length from the score).
+  // Routes where a package can be picked up receive bonus points
+  function precedenceScore({route, pickUp}) {
+    return (pickUp ? 0.5 : 0) - route.length;
+  }
+    route = routes.reduce((a, b) => precedenceScore(a) > precedenceScore(b) ? a : b).route;
+  }
+  return {direction: route[0], memory: route.slice(1)};
+}
+
 function routeRobot(state, memory) {
     if (memory.length == 0) {
         memory = mailRoute;
@@ -128,4 +150,5 @@ function compareRobots(robot1, memory1, robot2, memory2) {
     console.log(`Robot 2 took an average of ${totalStepsRobot2 / 100} steps per task`);
 }
   
-compareRobots(routeRobot, [], goalOrientedRobot, []);
+compareRobots(optimizedRobot, [], goalOrientedRobot, []);
+
