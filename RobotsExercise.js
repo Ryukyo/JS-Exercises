@@ -152,3 +152,35 @@ function compareRobots(robot1, memory1, robot2, memory2) {
   
 compareRobots(optimizedRobot, [], goalOrientedRobot, []);
 
+class PGroup {
+  constructor(items) {
+    this.items = items;
+  }
+  // Add the value to the map or if the value is already in the map, return the map as it is
+  add (newValue) {
+    if (this.has(newValue)) return this;
+    return new PGroup(this.items.concat([newValue]));
+  }
+  // Return a map without the value to delete or if the value is not existent, return the map as it is
+  delete (oldValue) {
+    if (!this.has(oldValue)) return this;
+    return new PGroup(this.items.filter(val => val !== oldValue));
+  }
+  // Evaluate if the value is already existing in the map of items
+  has (currentValue) {
+    return this.items.includes(currentValue)
+  }
+}
+
+PGroup.empty = new PGroup([]);
+let a = PGroup.empty.add("a");
+let ab = a.add("b");
+let b = ab.delete("a");
+
+console.log(b.has("b"));
+// → true
+console.log(a.has("b"));
+// → false
+console.log(b.has("a"));
+// → false
+
