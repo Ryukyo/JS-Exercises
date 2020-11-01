@@ -1,4 +1,4 @@
-const example = "rrryyyrryyyrr"
+const example = "rrryyrryyyyrr"
 // Modified leaves would look like "rrryyyyyyyyrr".
 
 function countNumberOfChanges (leaves) {
@@ -6,7 +6,7 @@ function countNumberOfChanges (leaves) {
     let countConsecutiveStart = 0;
     let countConsecutiveEnd = leaves.length - 1;
 
-    // Check if first and last character equal 'r', increase counter if not
+    // Check if first and last character equal 'r', increase counter if not, also ensuring one 'r' exists on both ends
     if (leaves[0] === 'y') {
         numberOfReplacements += 1;
     }
@@ -38,6 +38,11 @@ function countNumberOfChanges (leaves) {
         if (leaves.charAt(i) !== 'y') {
             numberOfReplacements++;
         }
+    }
+
+    if (!leaves.includes('y')) {
+        numberOfReplacements++;
+        console.log("y is missing")
     }
 
     // console.log(countConsecutiveStart)
