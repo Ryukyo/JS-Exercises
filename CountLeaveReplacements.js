@@ -1,10 +1,12 @@
-const example = "rrryyrryyyyrr"
+const example = "rrryyyrryyyrr"
 // Modified leaves would look like "rrryyyyyyyyrr".
 
-function countNumberOfChanges (leaves) {
+function countNumberOfChanges(leaves) {
     let numberOfReplacements = 0;
     let countConsecutiveStart = 0;
     let countConsecutiveEnd = leaves.length - 1;
+    let countR = 0;
+    let countY = 0;
 
     // Check if first and last character equal 'r', increase counter if not, also ensuring one 'r' exists on both ends
     if (leaves[0] === 'y') {
@@ -32,17 +34,34 @@ function countNumberOfChanges (leaves) {
         }
     }
 
-    // Between the index of the beginning and ending blocks of 'r', find all occurrences of 'r'
-    // Increase replacement counter if an 'r' is found
+    // Between the index of the beginning and ending blocks of 'r', count all occurrences of 'r' and 'y'
     for (let i = countConsecutiveStart; i < countConsecutiveEnd; i++) {
-        if (leaves.charAt(i) !== 'y') {
-            numberOfReplacements++;
+           if (leaves[i] === 'y') {
+            countY ++;
+        } else {
+            countR++;
+        }
+    }
+
+    // If there are more 'r' than 'y', increase replacement counter if an 'y' is found
+    // Else increase replacement counter if an 'r' is found
+    if (countR > countY) {
+        for (let i = countConsecutiveStart; i < countConsecutiveEnd; i++) {
+            if (leaves[i] === 'y') {
+                numberOfReplacements++;
+            }
+        }  
+    } else {
+        for (let i = countConsecutiveStart; i < countConsecutiveEnd; i++) {
+            if (leaves[i] === 'r') {
+                numberOfReplacements ++;
+            }
         }
     }
 
     if (!leaves.includes('y')) {
         numberOfReplacements++;
-        console.log("y is missing")
+        // console.log("String contained no y")
     }
 
     // console.log(countConsecutiveStart)
